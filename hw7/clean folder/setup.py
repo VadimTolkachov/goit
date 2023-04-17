@@ -8,5 +8,6 @@ setup(
     author='Flying Circus',
     author_email='curlic_curlic@for_exampel.com',
     license='MIT',
-    packages=find_namespace_packages()
+    packages=find_namespace_packages(),
+    entry_points={'console_scripts': ['clean folder = useful.some_code:sort']}
 )
