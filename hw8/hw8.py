@@ -77,8 +77,8 @@ def get_birthdays_per_week(users:list):
 
 
 
-users = [{'name': f'name{i}', 'birthday': datetime(year=2023, month=4, day=i)} for i in range(12, 30) ]
+#users = [{'name': f'name{i}', 'birthday': datetime(year=2023, month=4, day=i)} for i in range(12, 30) ]
 #print(users)
-users.append({'name': f'name{50}', 'birthday': datetime(year=2023, month=4, day=17)})
-get_birthdays_per_week(users)
+#users.append({'name': f'name{50}', 'birthday': datetime(year=2023, month=4, day=17)})
+#get_birthdays_per_week(users)
 
