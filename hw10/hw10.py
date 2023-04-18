@@ -12,9 +12,14 @@ class Phone(Field):
 
 
 class Record:
-    def __init__(self, name:Name, phone:Phone=None):
+    def __init__(self, name: Name, phone: Phone | list[Phone] = None):
         self.name = name
-        self.phones = [phone] if phone else []
+        if type(phone) == str:
+            self.phones = [phone]
+        elif type(phone) == list:
+            self.phones = [ph for ph in phone]
+        else:
+            self.phones = []
 
     def add(self, phone:Phone):
         self.phones.append(phone)
@@ -34,8 +39,6 @@ class Record:
         return f'{self.name}: {", ".join(self.phones)}'
 
 class AddressBooks(UserDict):
-    pass
 
-
-a = Record()
-print(a.show())
+    def __init__(self):
+        self.data = {}
