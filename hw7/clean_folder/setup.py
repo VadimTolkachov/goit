@@ -9,6 +9,5 @@ setup(
     author_email='curlic_curlic@for_exampel.com',
     license='MIT',
     packages=find_namespace_packages(),
-    
     entry_points={'console_scripts': ['clean_folder = clean_folder.Sort:sort']}
 )
