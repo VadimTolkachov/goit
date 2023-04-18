@@ -1,11 +1,5 @@
 from collections import UserDict
 
-class AddressBooks(UserDict):
-    pass
-
-class Record:
-    pass
-
 
 class Field:
     pass
@@ -15,3 +9,24 @@ class Name(Field):
 
 class Phone(Field):
     pass
+
+
+class Record:
+    def __init__(self, name:Name, phone:Phone=None):
+        self.name = name
+        self.phones = [phone] if phone else []
+
+    def add(self):
+        pass
+
+    def dell(self):
+        pass
+
+    def edit(self):
+        pass
+
+class AddressBooks(UserDict):
+    pass
+
+
+contacts = []
