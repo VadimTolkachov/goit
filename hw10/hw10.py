@@ -42,3 +42,6 @@ class AddressBooks(UserDict):
 
     def __init__(self):
         self.data = {}
+
+    def add(self, name:Name, phone:Phone):
+        self.data[Record(name, phone).name] = Record(name, phone).phones
