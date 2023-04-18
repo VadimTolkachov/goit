@@ -10,8 +10,8 @@ class Record:
 class Field:
     pass
 
-class Name:
+class Name(Field):
     pass
 
-class Phone:
+class Phone(Field):
     pass
