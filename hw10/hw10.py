@@ -37,3 +37,5 @@ class AddressBooks(UserDict):
     pass
 
 
+a = Record()
+print(a.show())
