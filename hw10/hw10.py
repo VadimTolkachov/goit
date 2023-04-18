@@ -2,7 +2,8 @@ from collections import UserDict
 
 
 class Field:
-    pass
+    def __init__(self, value):
+        self.value = value
 
 class Name(Field):
     pass
@@ -38,10 +39,16 @@ class Record:
     def show(self):
         return f'{self.name}: {", ".join(self.phones)}'
 
-class AddressBooks(UserDict):
+class AddressBook(UserDict):
 
-    def __init__(self):
-        self.data = {}
+    def add_record(self, record: Record):
+        self.data[record.name.value] = record
 
-    def add(self, name:Name, phone:Phone):
-        self.data[Record(name, phone).name] = Record(name, phone).phones
+
+name = Name("Vladik")
+phone = Phone('0930030322')
+rec = Record(name, phone)
+ab = AddressBook()
+ab.add_record(rec)
+print(ab)
+
