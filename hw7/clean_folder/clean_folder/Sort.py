@@ -83,7 +83,10 @@ def move_files(base_dir, root, files):
         print(f'Перенёс файл {file} в {category} из {root}')
         
 
-def sort(path):
+def sort(path = None):
+    if path == None:
+        path = sys.argv[1]
+    
     dict_typefolders = folders_for_type_files(path)
     path_list = {root: files for root, dirs, files in os.walk(path, topdown = False)}
     try:
