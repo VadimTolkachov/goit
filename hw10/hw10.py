@@ -10,8 +10,7 @@ class Name(Field):
 
 class Phone(Field):
     
-    def __str__(self) -> str:
-        pass
+    pass
     
 
 class Record:
@@ -58,20 +57,32 @@ class AddressBook(UserDict):
             result.append(f"{record.name.value}: {', '.join([phone.value for phone in record.phones])}")
         return "\n".join(result)
 
+class Bot:
 
-
+    def hello(self):
+        return "How can I help you?"
     
 
-    
+comands = {Bot: 'hello'}
+
+def handler(comand):
+    for comand_bot, key in comands.items():
+        if key == comand_bot:
+            return comand_bot
 
 
 
-name = Name("Vladik")
-phone = Phone('0930030322')
-rec = Record(name, phone)
-rec.add(Phone("0987654321"))
+def main():
 
-ab = AddressBook()
-ab.add_record(rec)
-print(ab)
+    while True:
+        input_comand = input('Pleace, enter comand:').lower()
+        if input_comand == 'exit' or input_comand =='close' or input_comand == 'good bye':
+            print("Good bye!")
+            break
 
+        comand = handler(input_comand)
+        print(comand)
+
+
+if __name__ == '__main__':
+    main()
