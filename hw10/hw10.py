@@ -1,9 +1,16 @@
 from collections import UserDict
-contacts = []
+
+
+from collections import UserDict
+
 
 class Field:
     def __init__(self, value):
         self.value = value
+
+    def __str__(self) -> str:
+        return self.value
+        
 
 class Name(Field):
     pass
@@ -11,55 +18,60 @@ class Name(Field):
 class Phone(Field):
     
     pass
-    
+
 
 class Record:
-    def __init__(self, name: Name, phone: Phone | list[Phone] = None):
+    def __init__(self, name: Name, phones: list[Phone] = []) -> None:
         self.name = name
-        if type(phone) == str or type(phone) == Phone:
-            self.phones = [phone]
-        elif type(phone) == list:
-            self.phones = [ph for ph in phone]
+        self.phones = phones
+
+    def add_phone(self, name: Name, phone: Phone):
+        if phone not in self.phones:
+            self.phones.append(phone)
+            return f'I add new number phone {phone.value} to contact {name.value}.'
         else:
-            self.phones = []
-
-    def add(self, phone:Phone):
-        self.phones.append(phone)
-
-    def dell(self, phone:Phone):
-        for i in self.phones:
-            if i == phone:
-
-                self.phones.remove(i)
+            return 'This phone number already exists.'
         
+    def dell_phone(self, name:Name, phone: Phone):
+        for p in self.phones:
+            if p.value == phone.value:
+                self.phones.remove(p)
+                return f'I remove number phone {p.value}.'
+        return f"I don't find this number."
 
-    def edit(self, phone:Phone, new_phone:Phone):
-        self.dell(phone)
-        self.add(new_phone)
 
-    def show(self):
-        return f'{self.name}: {", ".join(self.phones)}'
+
+    def __str__(self) -> str:
+        return ', '.join([str(p) for p in self.phones])
     
-    def __str__(self):
-        phones = ", ".join([str(phone) for phone in self.phones])
-        return f"{self.name}: {phones}"    
+    def __repr__(self) -> str:
+        return str(self)
 
     
+
 
 class AddressBook(UserDict):
 
-    def add_record(self, record: Record):
+    def add_contact(self, record: Record):
         self.data[record.name.value] = record
 
-    def __str__(self):
+    def find_phone(self, name: Name):
+        for contact in contacts:
+            if contact == name.value:
+                
+                return contacts[contact]
+        return "I don't find this contact"
+    def dell_contact(self, name: Name):
+        for contact in contacts:
+            if contact == name.value:
+                contacts.pop(contact)
+                return f"I removed contact{name}."
+        return 'I dont find contact.'
+    """def __str__(self):
         result = []
         for record in self.data.values():
             result.append(f"{record.name.value}: {', '.join([phone.value for phone in record.phones])}")
-        return "\n".join(result)
-
-
-
-contacts = AddressBook()
+        return "\n".join(result)"""
 
 
 
@@ -73,60 +85,145 @@ contacts = AddressBook()
 
 
 
-class Bot:
-    
-    def hello(self):
-        return "How can I help you?"
-    
-    def input_errors(func):
-        def inner(*args):
-            try:
-                return func(*args)
-            except (KeyError, IndexError, ValueError):
-                return "Not enough arguments."
-        return inner
-    
-    @input_errors
-    def add(self, *args:str):
-    
-        lst_cont = args[0].split()
-        name = Name(lst_cont[1])
-        number_phone = Phone(lst_cont[2])
-        rec = Record(name, number_phone)
-        contacts.add_record(rec)
-        if not number_phone:
-            raise IndexError()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def input_errors(func):
+    def inner(*args):
+        try:
+            return func(*args)
+        except (KeyError, IndexError, ValueError):
+            return "Not enough arguments."
+    return inner
+
+
+
+@input_errors
+def add(*args:tuple):
+    tupl = args[0].split()
+    name = Name(tupl[1])
+    phone = Phone(tupl[2])
+    rec = Record(name, [phone])
+    for key_contact in contacts:
+        if key_contact == name.value:
+            return contacts[key_contact].add_phone(name, phone)
         
-        return f'I add new contact: {name} {number_phone}'
-    
+    contacts.add_contact(rec)
+    return 'I add new contact'
 
-    @input_errors
-    def change(self,*args:str):
-        lst_cont = args[0].split()
-        name = Name(lst_cont[1])
-        number_phone = Phone(lst_cont[2])
-        iter = 0
-        for contact in contacts:
-            if contact['name'] == name and contact['number_phone'] == number_phone:
-                new_number_phone = input('Enter new nomber phone:')
-                contacts[iter]['number_phone'] = new_number_phone
-                return f'Contact: {contact["name"]} has new telephone number: {new_number_phone}'
-            iter += 1
-    
-        return "I didn't find this cocntact!"
-    
+@input_errors
+def dell_phone(*args:tuple):
+    tupl = args[0].split()
+    name = Name(tupl[1])
+    phone = Phone(tupl[2])
+    rec = Record(name, [phone])  
+    for key_contact in contacts:
+        if key_contact == name.value:
+            
+            return contacts[key_contact].dell_phone(name, phone)
+            #return phone in contacts[key_contact].self.phones 
+
+    return 'I did not find an entry with the specified name' 
+
+@input_errors
+def dell_contact(*args:tuple):
+    tupl = args[0].split()
+    name = Name(tupl[1])
+    return contacts.dell_contact(name)
+
+@input_errors
+def change(*args:tuple):
+    tupl = args[0].split()
+    name = Name(tupl[1])
+    phone = Phone(tupl[2])
+    rec = Record(name, [phone])  
 
 
 
-def handler(text):
-    bot = Bot()
+
+
+
+
+
+
+
+
+
+def phone(*args:tuple):
+    tupl = args[0].split()
+    name = Name(tupl[1])
+    return contacts.find_phone(name)
+
+def show_all():
+    return contacts
+def hello():
+    return "How can I help you?"
+
+def comand_enoter():
+    return 'Unknow comand. Please, try again.'
+
+
+def hendler(text:str):
+   
     if text == 'hello':
-        return bot.hello()
-    elif text.startswith('add'):
-        return Bot.add(text)
+        return hello()
     
-
-
+    elif text.startswith('add'):
+        return add(text)
+    
+    elif text.startswith('change'):
+        return change(text)
+    
+    elif text.startswith('dellcontact'):
+        return dell_contact(text)
+    
+    elif text.startswith('dell'):
+        return dell_phone(text)
+    
+    
+    elif text.startswith('phone'):
+        return phone(text)
+    
+    elif text.startswith('show all'):
+        return show_all()
+    else:
+        return comand_enoter()
+    
+contacts = AddressBook()
 def main():
 
     while True:
@@ -135,9 +232,11 @@ def main():
             print("Good bye!")
             break
 
-        comand = handler(input_comand)
+        comand = hendler(input_comand)
         print(comand)
 
+    
 
 if __name__ == '__main__':
     main()
+    #tast()
