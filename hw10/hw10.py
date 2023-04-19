@@ -69,8 +69,9 @@ class AddressBook(UserDict):
 name = Name("Vladik")
 phone = Phone('0930030322')
 rec = Record(name, phone)
+rec.add(Phone("0987654321"))
+
 ab = AddressBook()
 ab.add_record(rec)
-Test = ab.get("Vladik")   
-print(Test)
+print(ab)
 
