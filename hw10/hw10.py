@@ -1,5 +1,5 @@
 from collections import UserDict
-
+contacts = []
 
 class Field:
     def __init__(self, value):
@@ -57,19 +57,74 @@ class AddressBook(UserDict):
             result.append(f"{record.name.value}: {', '.join([phone.value for phone in record.phones])}")
         return "\n".join(result)
 
-class Bot:
 
+
+contacts = AddressBook()
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Bot:
+    
     def hello(self):
         return "How can I help you?"
     
+    def input_errors(func):
+        def inner(*args):
+            try:
+                return func(*args)
+            except (KeyError, IndexError, ValueError):
+                return "Not enough arguments."
+        return inner
+    
+    @input_errors
+    def add(self, *args:str):
+    
+        lst_cont = args[0].split()
+        name = Name(lst_cont[1])
+        number_phone = Phone(lst_cont[2])
+        rec = Record(name, number_phone)
+        contacts.add_record(rec)
+        if not number_phone:
+            raise IndexError()
+        
+        return f'I add new contact: {name} {number_phone}'
+    
 
-comands = {Bot: 'hello'}
+    @input_errors
+    def change(self,*args:str):
+        lst_cont = args[0].split()
+        name = Name(lst_cont[1])
+        number_phone = Phone(lst_cont[2])
+        iter = 0
+        for contact in contacts:
+            if contact['name'] == name and contact['number_phone'] == number_phone:
+                new_number_phone = input('Enter new nomber phone:')
+                contacts[iter]['number_phone'] = new_number_phone
+                return f'Contact: {contact["name"]} has new telephone number: {new_number_phone}'
+            iter += 1
+    
+        return "I didn't find this cocntact!"
+    
 
-def handler(comand):
-    for comand_bot, key in comands.items():
-        if key == comand_bot:
-            return comand_bot
 
+
+def handler(text):
+    bot = Bot()
+    if text == 'hello':
+        return bot.hello()
+    elif text.startswith('add'):
+        return Bot.add(text)
+    
 
 
 def main():
