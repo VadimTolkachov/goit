@@ -1,9 +1,6 @@
 from collections import UserDict
 
 
-from collections import UserDict
-
-
 class Field:
     def __init__(self, value):
         self.value = value
@@ -11,12 +8,10 @@ class Field:
     def __str__(self) -> str:
         return self.value
         
-
 class Name(Field):
     pass
 
 class Phone(Field):
-    
     pass
 
 
@@ -38,7 +33,13 @@ class Record:
                 self.phones.remove(p)
                 return f'I remove number phone {p.value}.'
         return f"I don't find this number."
-
+    
+    def change(self, name: Name ,phone: Phone, new_phone: Phone):
+        self.dell_phone(name, phone)
+        self.add_phone(name, new_phone)
+        return 'Done!'
+        #self.delete_number(phone)
+        #self.add_number(new_phone)
 
 
     def __str__(self) -> str:
@@ -46,8 +47,6 @@ class Record:
     
     def __repr__(self) -> str:
         return str(self)
-
-    
 
 
 class AddressBook(UserDict):
@@ -67,59 +66,11 @@ class AddressBook(UserDict):
                 contacts.pop(contact)
                 return f"I removed contact{name}."
         return 'I dont find contact.'
-    """def __str__(self):
+    def __str__(self):
         result = []
         for record in self.data.values():
             result.append(f"{record.name.value}: {', '.join([phone.value for phone in record.phones])}")
-        return "\n".join(result)"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return "\n".join(result)
 
 
 def input_errors(func):
@@ -129,7 +80,6 @@ def input_errors(func):
         except (KeyError, IndexError, ValueError):
             return "Not enough arguments."
     return inner
-
 
 
 @input_errors
@@ -169,18 +119,10 @@ def dell_contact(*args:tuple):
 def change(*args:tuple):
     tupl = args[0].split()
     name = Name(tupl[1])
-    phone = Phone(tupl[2])
-    rec = Record(name, [phone])  
-
-
-
-
-
-
-
-
-
-
+    old_phone = Phone(tupl[2])
+    new_phone = Phone(tupl[3])
+    rec = contacts.get(name.value)
+    return rec.change(name, old_phone, new_phone)
 
 
 def phone(*args:tuple):
@@ -234,8 +176,6 @@ def main():
 
         comand = hendler(input_comand)
         print(comand)
-
-    
 
 if __name__ == '__main__':
     main()
